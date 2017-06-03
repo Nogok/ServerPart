@@ -176,8 +176,7 @@ public class GetDataConroller {
 			BasicDBObject query = new BasicDBObject();
 			List<BasicDBObject> listForQuery = new ArrayList<>();
 			listForQuery.add(new BasicDBObject("dsaSign", vote.dsaSign));
-//			listForQuery.add(new BasicDBObject("initiative", gson.toJson(vote.initiative)));
-			listForQuery.add(new BasicDBObject("initiative", vote.initiative)); // давай так еще попробуем компильни
+			listForQuery.add(new BasicDBObject("initiative", gson.toJson(vote.initiative)));
 			query.put("$and", listForQuery);
 			System.err.println("previous votes count is: "+collect.find(query).count());
 						voteIsFirst = collect.find(query)==null || collect.find(query).count()==0 ; 
