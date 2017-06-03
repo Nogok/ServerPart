@@ -89,6 +89,7 @@ public class GetDataConroller {
     @RequestMapping(value="/getallvotes",method={RequestMethod.POST,RequestMethod.GET})
     public List<Vote> getAllVotesAll(){
     	collect = db.getCollection(DBforVotes);
+    	System.err.println("All votes count is: "+collect.count());
     	DBCursor cursor = collect.find();
     	while (cursor.hasNext()){
     		votes.add(gson.fromJson(gson.toJson(cursor.next()), Vote.class));
