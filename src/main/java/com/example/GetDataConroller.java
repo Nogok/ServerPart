@@ -96,6 +96,7 @@ public class GetDataConroller {
 	 //Запрос на получение списка инициатив
     @RequestMapping(value="/getinitiatives",method={RequestMethod.POST,RequestMethod.GET})
     public List<Initiative> getAllInitives(){
+    	initiatives = null;
     	collect = db.getCollection(DBforInitiatives);
     	DBCursor cursor = collect.find();
     	while (cursor.hasNext()){
