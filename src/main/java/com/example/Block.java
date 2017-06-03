@@ -63,26 +63,34 @@ public class Block  {
         return sb.toString();
     }
 
-    public static boolean blockValidity(Block a, List<Block> chain, String goal){
-        Block b = chain.get(chain.size()-1);
-        if (a.hash.compareTo(goal) < 0) return true;
+    public static boolean blockValidity(Block a, Block lastBlock, String goal){
+        
+        if (a.hash.compareTo(goal) < 0 && a.index == lastBlock.index+1 && a.previousHash.equals(lastBlock.hash)) return true;
         else return false;
     }
 
-    public int getIndex() {
-        return index;
-    }
+	public int getIndex() {
+		return index;
+	}
 
-    public String getHash() {
-        return hash;
-    }
+	public Date getTimestamp() {
+		return timestamp;
+	}
 
-    public String getPreviousHash() {
-        return previousHash;
-    }
-    public Block getPreviousBlock() {
-        return previousBlock;
-    }
-    
-    
+	public String getVoteHash() {
+		return voteHash;
+	}
+
+	public String getHash() {
+		return hash;
+	}
+
+	public String getPreviousHash() {
+		return previousHash;
+	}
+
+	public Block getPreviousBlock() {
+		return previousBlock;
+	}
+
 }

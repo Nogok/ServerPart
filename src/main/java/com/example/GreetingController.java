@@ -20,19 +20,15 @@ public class GreetingController {
 	 * Контроллер запросов
 	 * */
 	
-	Vote v; //Голос, с которым идёт работа
-	Block b = new Block(null); //Блок, с которым идёт работа
-    List<Initiative> initiatives=new ArrayList<>(); //Список инициатив
-    List<Vote> votes = new ArrayList<>(); //Список нераспределённых в блок голосов
-    List<Block> chain = new ArrayList<>(); //Цепочка блоков
+	public Vote v; //Голос, с которым идёт работа
+	public Block b = new Block(null); //Блок, с которым идёт работа
+	public List<Initiative> initiatives=new ArrayList<>(); //Список инициатив
+    public List<Vote> votes = new ArrayList<>(); //Список нераспределённых в блок голосов
+    public List<Block> chain = new ArrayList<>(); //Цепочка блоков
     public String goal = "00007ffaff3939fbca4eb074249dc7d39b1d1ee4fed2da3f87430703cac5d250a"; //Число для условия blockhash < goal
 
     //POST запрос -- создание инициативы, внесение в список инициатив (Инициатива получается от пользователя)
-    @RequestMapping(value="/addinitiative",method=RequestMethod.POST)
-    public void addNewInitive(@RequestBody Initiative initiative){
-    	if (!initiatives.contains(initiative))
-    	initiatives.add(initiative);
-    }
+    
     
     @RequestMapping(value="/getallvotes",method={RequestMethod.POST,RequestMethod.GET})
     public List<Vote> getAllVotesAll(){
@@ -74,7 +70,7 @@ public class GreetingController {
     			votesForInitiative.add(v);
     			System.err.println("SOMETHING ADDED");
     	
-    		}//Забыл про скобки эти
+    		}
     	}
     	return votesForInitiative;
     }
@@ -89,34 +85,7 @@ public class GreetingController {
     }
     
     
-    //Создание голоса, пришедшего от пользователя. Проверка на достоверность, добавление в список нераспределённых голосов
-	@RequestMapping( path ="/addvote", method=RequestMethod.POST)
-	public void voteCreator(@RequestBody Vote vote){
-		boolean voteIsFirst = true;
-		for (int i = 0; i < votes.size(); i++){
-			if (vote.dsaSign.equals(votes.get(i).dsaSign) && vote.initiative.equals(votes.get(i).initiative))
-				voteIsFirst = false;
-		}
-		if (voteIsFirst){
-		Gson gson = new Gson();
-		String tmpDsaSign=vote.dsaSign;
-		byte[] sign=Base64.getMimeDecoder().decode(vote.dsaSign);
-		byte[] pubKey=Base64.getMimeDecoder().decode(vote.publicKey);
-		vote.dsaSign=null;
-		boolean valid = false;
-		try {
-			valid = DigitalSign.verifySig(gson.toJson(vote).getBytes(), DigitalSign.convertKey(pubKey) , sign);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		System.err.println(valid);
-		if(valid)
-		{	
-		    vote.dsaSign=tmpDsaSign;
-			votes.add(vote);
-		}	
-	   }	
-	}
+    
 	
 	//Запрос на получение числа goal
 	@RequestMapping(path = "/getgoal")
@@ -132,14 +101,5 @@ public class GreetingController {
 		return b;
 	}
 	
-	@RequestMapping(value="/addblock",method=RequestMethod.POST)
-	public void addNewBlock(@RequestBody Block block){
-			if(chain.isEmpty()){
-				
-				chain.add(b);
-			}
-			if(Block.blockValidity(block, chain, goal))
-	    	b = block;
-	}
 	
 }
