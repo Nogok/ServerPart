@@ -176,11 +176,10 @@ public class GetDataConroller {
 			BasicDBObject query = new BasicDBObject();
 			List<BasicDBObject> listForQuery = new ArrayList<>();
 			listForQuery.add(new BasicDBObject("dsaSign", vote.dsaSign));
-			listForQuery.add(new BasicDBObject("initiative", vote.initiative));
+			listForQuery.add(new BasicDBObject("initiative", gson.toJson(vote.initiative)));
 			query.put("$and", listForQuery);
-			if (collect.find(query) != null) {
-				voteIsFirst = false;
-			}	
+			System.err.println("previous votes count is: "+collect.find(query));
+			voteIsFirst = collect.find(query) == null; // так красивее.
 			if (voteIsFirst){
 				
 				String tmpDsaSign=vote.dsaSign;
