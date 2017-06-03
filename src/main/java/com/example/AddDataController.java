@@ -77,8 +77,11 @@ public class AddDataController {
 					vote.dsaSign=tmpDsaSign;
 					GetDataConroller.votes.add(vote);
 					BasicDBObject obj = new BasicDBObject();
+					BasicDBObject object = new BasicDBObject();
+			    	object.put("description", vote.initiative.description);
+			    	object.put("variants", vote.initiative.variants);
 					obj.put("dsaSign", vote.dsaSign);
-					obj.put("initiative", vote.initiative);
+					obj.put("initiative", object);
 					obj.put("publicKey",vote.publicKey);
 					obj.put("variant",vote.variant);
 					collect.insert(obj);
