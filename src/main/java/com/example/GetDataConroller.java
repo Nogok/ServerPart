@@ -76,7 +76,8 @@ public class GetDataConroller {
     	collect = db.getCollection(DBforVotes);
     	ArrayList<Vote> votesForInitiative = new ArrayList<>();
     	BasicDBObject query = new BasicDBObject();
-    	query.put("initiative", gson.toJson(initiative));
+//    	query.put("initiative", gson.toJson(initiative));
+    	query.put("vote.initiative", gson.toJson(initiative));
     	System.err.println(gson.toJson(initiative));
     	DBCursor cursor = collect.find(query);
     	System.err.println("Selected votes:"+cursor.count());
