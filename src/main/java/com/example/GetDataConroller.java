@@ -76,8 +76,8 @@ public class GetDataConroller {
     	collect = db.getCollection(DBforVotes);
     	ArrayList<Vote> votesForInitiative = new ArrayList<>();
     	BasicDBObject query = new BasicDBObject();
-    	query.put("description", initiative.description);//ты заполняешь поля, которые значимы, и потом ищешь
-    	DBCursor cursor = collect.find(query); // поиск по моему не так, но давай компильнем
+    	query.put("initiative", gson.toJson(initiative));// компильни
+    	DBCursor cursor = collect.find(query);
     	while (cursor.hasNext()){
     		votesForInitiative.add(gson.fromJson(gson.toJson(cursor.next()), Vote.class));
     	}
