@@ -31,8 +31,7 @@ public class AddDataController {
 	//Добавление инициативы, пришедшей от пользователя.
 	@RequestMapping(value="/addinitiative",method=RequestMethod.POST)
     public void addNewInitive(@RequestBody Initiative initiative){
-    	if (!GetDataConroller.initiatives.contains(initiative))
-    		GetDataConroller.initiatives.add(initiative);
+    	
     	collect = db.getCollection(DBforInitiatives);
     	BasicDBObject object = new BasicDBObject();
     	object.put("description", initiative.description);
