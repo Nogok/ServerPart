@@ -36,7 +36,9 @@ public class GetDataConroller {
     public static String goal = "00007ffaff3939fbca4eb074249dc7d39b1d1ee4fed2da3f87430703cac5d250a"; //Число для условия blockhash < goal
 			
     
-    
+    /*
+     * Блок отправки данных пользователю 
+     * */
     
 	//Запрос на получение числа goal
 	@RequestMapping(path = "/getgoal")
