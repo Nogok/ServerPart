@@ -96,6 +96,12 @@ public class GetDataConroller {
 	 //Запрос на получение списка инициатив
     @RequestMapping(value="/getinitiatives",method={RequestMethod.POST,RequestMethod.GET})
     public List<Initiative> getAllInitives(){
+    	collect = db.getCollection(DBforInitiatives);
+    	DBCursor cursor = collect.find();
+    	while (cursor.hasNext()){
+    		initiatives.add(gson.fromJson(gson.toJson(cursor.next()), Initiative.class));
+    	}
+    	
     	return initiatives;
     }
     
@@ -131,6 +137,10 @@ public class GetDataConroller {
     	return votesNotInBlock;
     }
     
+    /**
+     * Блок получения и обработки данных
+     * 
+     * */
     
     
 	
