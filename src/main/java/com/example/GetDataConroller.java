@@ -61,7 +61,8 @@ public class GetDataConroller {
 		System.err.println(collect.count());
 		if (collect.count() == 0) {
 			//System.err.println(gson.toJson(b));
-			b.votes.add(new Vote());
+			Initiative i=new Initiative("First inititive. Need you this system?", new String[]{"yes"});
+			b.votes.add(new Vote(i,0,""));
 			addNewBlock(b);
 		}
 		System.err.println(collect.count());
