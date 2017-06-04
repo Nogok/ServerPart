@@ -56,7 +56,7 @@ public class GetDataConroller {
 		DBCursor cursor = collect.find();
 		Gson gson = new Gson();
 		while(cursor.hasNext()){
-			b = gson.fromJson(gson.toJson(cursor.next()), Block.class);
+			b = gson.fromJson(gson.toJsonTree(cursor.next()), Block.class);
 		}
 		return b;
 	}
@@ -106,9 +106,6 @@ public class GetDataConroller {
     	System.err.println("Collection size "+collect.count());
     	DBCursor cursor = collect.find();
     	while (cursor.hasNext()){
-    		// :))
-    		//О боже
-    		
     		initiatives.add(gson.fromJson(gson.toJson(cursor.next()), Initiative.class));
     	}
     	
