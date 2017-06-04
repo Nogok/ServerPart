@@ -73,6 +73,12 @@ public class GetDataConroller {
 		return blocks.get(blocks.size()-1); // TODO: invistigate it!
 		else return null;
 	}
+	
+	@RequestMapping(value = "/cleanBlocksDB", method={RequestMethod.POST,RequestMethod.GET})
+	public void cleanDB(){
+		collect = db.getCollection(DBforBlocks);
+		collect.drop();
+	}
 
 	 //Запрос на получение списка всех блоков
     @RequestMapping(value="/getAllBlocks",method={RequestMethod.POST,RequestMethod.GET})
