@@ -29,7 +29,7 @@ public class GetDataConroller {
 	DBCollection collect = null;
 	String DBforInitiatives = "INITIATIVES", DBforVotes = "VOTES", DBforBlocks = "BLOCKS";
 	Gson gson = new Gson();
-	public static String goal = "00fffffaff3939fbca4eb074249dc7d39b1d1ee4fed2da3f87430703cac5d250a"; //Число для условия blockhash < goal
+	public static String goal = "0007fffaff3939fbca4eb074249dc7d39b1d1ee4fed2da3f87430703cac5d250a"; //Число для условия blockhash < goal
 			
     
     /*
@@ -190,15 +190,14 @@ public class GetDataConroller {
     	
     	List<Vote> votesNotInBlock = new ArrayList<>();
     	for(int i = 0; i < listOfVotes.size(); i++){
-    		boolean isTaken = true;
+    		boolean isTaken = false;
     		Vote vote = listOfVotes.get(i);
     		for(int j = 0; j < chain.size(); j++){
-    			Block b = chain.get(j);
     			if (chain.size() == 1){
-    				isTaken = false;
     				break;
     			}
-    			if(!b.votes.contains(vote)) isTaken = false;
+    			Block b = chain.get(j);
+    			if(b.votes.contains(vote)) isTaken = true;
     			
     		}
     		if (!isTaken) votesNotInBlock.add(listOfVotes.get(i)); 
