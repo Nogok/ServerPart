@@ -30,7 +30,7 @@ public class GetDataConroller {
 	Gson gson = new Gson();
 	
 	public static Vote v; //Голос, с которым идёт работа
-	public static Block b = new Block(null); //Блок, с которым идёт работа
+	public static Block b = new Block(new ArrayList<Vote>()); //Блок, с которым идёт работа
 	public static List<Initiative> initiatives=new ArrayList<>(); //Список инициатив
     public static List<Vote> votes = new ArrayList<>(); //Список нераспределённых в блок голосов
     public static List<Block> chain = new ArrayList<>(); //Цепочка блоков
@@ -54,6 +54,7 @@ public class GetDataConroller {
 		collect = db.getCollection(DBforBlocks);
 		collect.drop(); //Это я зачищал коллекцию
 	}
+	
 	//Запрос на получение последнего блока из цепочки
 	@RequestMapping(value = "/getBlock", method={RequestMethod.POST,RequestMethod.GET})
 	public Block getBlock(){
