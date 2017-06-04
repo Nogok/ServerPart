@@ -47,13 +47,16 @@ public class GetDataConroller {
 			required=false, defaultValue="World") String name){
 		return goal;
 	}
-	
+
+	@RequestMapping(value = "/cleanAllBlocks", method={RequestMethod.POST,RequestMethod.GET})
+	public void cleanAllBlocks(){
+		collect = db.getCollection(DBforBlocks);
+		collect = db.getCollection(DBforBlocks);
+		collect.drop(); //Это я зачищал коллекцию
+	}
 	//Запрос на получение последнего блока из цепочки
 	@RequestMapping(value = "/getBlock", method={RequestMethod.POST,RequestMethod.GET})
 	public Block getBlock(){
-		collect = db.getCollection(DBforBlocks);
-		System.err.println(collect.count());
-		collect.drop();
 		collect = db.getCollection(DBforBlocks);
 		System.err.println(collect.count());
 		if (collect.count() == 0) addNewBlock(b);
@@ -105,6 +108,7 @@ public class GetDataConroller {
     	}
     	return votes;	
     }
+    
 	 //Запрос на получение списка инициатив
     @RequestMapping(value="/getinitiatives",method={RequestMethod.POST,RequestMethod.GET})
     public List<Initiative> getAllInitives(){
@@ -118,7 +122,20 @@ public class GetDataConroller {
     	
     	return initiatives;
     }
-    
+
+	 //Запрос на получение списка всех блоков
+    @RequestMapping(value="/getAllBlocks",method={RequestMethod.POST,RequestMethod.GET})
+    public List<Block> getAllBlocks(){
+    	ArrayList<Block> blocks = new ArrayList<>();
+    	collect = db.getCollection(DBforBlocks);
+    	System.err.println("Collection size "+collect.count());
+    	DBCursor cursor = collect.find();
+    	while (cursor.hasNext()){
+    		blocks.add(gson.fromJson(gson.toJson(cursor.next()), Block.class));
+    	}
+    	return blocks;
+    }
+
 	//Запрос на получение списка голосов для генерации блока
     @RequestMapping(value="/getvotes",method={RequestMethod.POST,RequestMethod.GET})
     public List<Vote> getAllVotes(){
