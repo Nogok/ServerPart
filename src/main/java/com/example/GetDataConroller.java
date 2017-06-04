@@ -52,11 +52,13 @@ public class GetDataConroller {
 	@RequestMapping(value = "/getBlock", method={RequestMethod.POST,RequestMethod.GET})
 	public Block getBlock(){
 		collect = db.getCollection(DBforBlocks);
+		
 		if (collect.count() == 0) addNewBlock(b);
 		DBCursor cursor = collect.find();
 		Gson gson = new Gson();
 		while(cursor.hasNext()){
 			b = gson.fromJson(gson.toJson(cursor.next()), Block.class);
+			System.err.println(b);
 		}
 		return b;
 	}
