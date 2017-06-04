@@ -38,8 +38,7 @@ public class GetDataConroller {
     
 	//Запрос на получение числа goal
 	@RequestMapping(path = "/getgoal")
-	public String getGoal(@RequestParam(value="name",
-			required=false, defaultValue="World") String name){
+	public String getGoal(){
 		return goal;
 	}
 
@@ -188,11 +187,11 @@ public class GetDataConroller {
     	while(cursor.hasNext()){
     		chain.add(gson.fromJson(gson.toJson(cursor.next()), Block.class));
     	}
+    	
     	List<Vote> votesNotInBlock = new ArrayList<>();
     	for(int i = 0; i < listOfVotes.size(); i++){
     		boolean isTaken = true;
     		Vote vote = listOfVotes.get(i);
-    		
     		for(int j = 0; j < chain.size(); j++){
     			Block b = chain.get(j);
     			if (chain.size() == 1){
