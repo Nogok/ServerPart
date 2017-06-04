@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.yaml.snakeyaml.tokens.BlockSequenceStartToken;
 
 import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
@@ -60,17 +61,18 @@ public class GetDataConroller {
 		collect = db.getCollection(DBforBlocks);
 		System.err.println(collect.count());
 		if (collect.count() == 0) {
-			System.err.println(gson.toJson(b));
+			//System.err.println(gson.toJson(b));
 			addNewBlock(b);
 		}
 		System.err.println(collect.count());
 		DBCursor cursor = collect.find();
-		Gson gson = new Gson();
+		ArrayList<Block> blocks=new ArrayList<>();
 		while(cursor.hasNext()){
-			b = gson.fromJson(gson.toJson(cursor.next()), Block.class);
-			System.err.println(gson.toJson(b));
+			Block bb = gson.fromJson(gson.toJson(cursor.next()), Block.class);
+			blocks.add(bb);
+			System.err.println(gson.toJson(bb));
 		}
-		return b;
+		return blocks.get(blocks.size()-1); // вот тут сейчас сделаю жуткий костыль ))
 	}
     
     //Запрос на получение инициативы, содержащую описание descrption
