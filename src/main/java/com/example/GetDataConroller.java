@@ -260,12 +260,12 @@ public class GetDataConroller {
 				object.put("index", b.getIndex());
 				object.put("timestamp",b.getTimestamp());
 				object.put("voteHash",b.getVoteHash());
-				object.put("votes",gson.toJsonTree(b.votes));
+				object.put("votes",gson.toJson(b.votes));
 				object.put("hash",b.getHash());
 				object.put("previousHash",b.getPreviousHash());
 				object.put("previousBlock",gson.toJson(b.getPreviousBlock()));
 				object.put("nonce",b.nonce);
-				collect.insert(object);
+				collect.insert(object); //падает тут
 				
 		}
 	
