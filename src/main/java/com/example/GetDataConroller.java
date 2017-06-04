@@ -19,6 +19,7 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.util.JSON;
 
 @RestController
 public class GetDataConroller {
@@ -28,13 +29,7 @@ public class GetDataConroller {
 	DBCollection collect = null;
 	String DBforInitiatives = "INITIATIVES", DBforVotes = "VOTES", DBforBlocks = "BLOCKS";
 	Gson gson = new Gson();
-	
-	public static Vote v; //Голос, с которым идёт работа
-	public static Block b = new Block(new ArrayList<Vote>()); //Блок, с которым идёт работа
-	public static List<Initiative> initiatives=new ArrayList<>(); //Список инициатив
-    public static List<Vote> votes = new ArrayList<>(); //Список нераспределённых в блок голосов
-    public static List<Block> chain = new ArrayList<>(); //Цепочка блоков
-    public static String goal = "00fffffaff3939fbca4eb074249dc7d39b1d1ee4fed2da3f87430703cac5d250a"; //Число для условия blockhash < goal
+	public static String goal = "00fffffaff3939fbca4eb074249dc7d39b1d1ee4fed2da3f87430703cac5d250a"; //Число для условия blockhash < goal
 			
     
     /*
@@ -60,26 +55,65 @@ public class GetDataConroller {
 		collect = db.getCollection(DBforBlocks);
 		System.err.println(collect.count());
 		if (collect.count() == 0) {
-			//System.err.println(gson.toJson(b));
-			Initiative i=new Initiative("First inititive. Need you this system?", new String[]{"yes"});
-			b.votes.add(new Vote(i,0,""));
-			addNewBlock(b);
+			//Genesis block
+			Initiative i=new Initiative("", new String[]{""});
+			Vote v=new Vote(i,0,"");
+			ArrayList<Vote> vs=new ArrayList<Vote>();
+			vs.add(v);
+			addNewBlock(new Block(vs));
 		}
 		System.err.println(collect.count());
-		collect = db.getCollection(DBforBlocks);
 		DBCursor cursor = collect.find();
 		ArrayList<Block> blocks=new ArrayList<>();
 		while(cursor.hasNext()){
-			String str=gson.toJson(cursor.next());
-			System.err.println(str);
-			Block bb = gson.fromJson(str, Block.class);
+			Block bb = gson.fromJson(gson.toJson(cursor.next()), Block.class);
 			blocks.add(bb);
-			System.err.println(gson.toJson(bb));
 		}
+		if(blocks.size()>0)
 		return blocks.get(blocks.size()-1); // TODO: invistigate it!
+		else return null;
 	}
-    
-    //Запрос на получение итнициативы, содержащую описание descrption
+
+	 //Запрос на получение списка всех блоков
+    @RequestMapping(value="/getAllBlocks",method={RequestMethod.POST,RequestMethod.GET})
+    public List<Block> getAllBlocks(){
+    	ArrayList<Block> blocks = new ArrayList<>();
+    	collect = db.getCollection(DBforBlocks);
+    	System.err.println("Collection size "+collect.count());
+    	DBCursor cursor = collect.find();
+    	while (cursor.hasNext()){
+    		Block bb = gson.fromJson(gson.toJson(cursor.next()), Block.class);
+			blocks.add(bb);
+    	}
+    	return blocks;
+    }
+
+	
+	@RequestMapping(value="/addblock",method=RequestMethod.POST)
+	public void addNewBlock(@RequestBody Block block){
+		collect = db.getCollection(DBforBlocks);
+		DBCursor cursor = collect.find();
+		Block lastBlock = null;
+		while(cursor.hasNext()){
+			lastBlock = gson.fromJson(gson.toJson(cursor.next()), Block.class);
+		}
+		if(collect.count()==0 || Block.blockValidity(block, lastBlock, GetDataConroller.goal)){
+//			BasicDBObject object = new BasicDBObject();
+//			object.put("index", block.getIndex());
+//			object.put("timestamp",block.getTimestamp());
+//			object.put("voteHash",block.getVoteHash());
+//			object.put("votes",gson.toJsonTree(block.votes));
+//			object.put("hash",block.getHash());
+//			object.put("previousHash",block.getPreviousHash());
+//			object.put("previousBlock",gson.toJson(block.getPreviousBlock()));
+//			object.put("nonce",block.nonce);
+//			System.err.println(gson.toJson(object));
+			collect.insert((DBObject)JSON.parse(gson.toJson(block))); 				
+		}
+	}
+
+	
+	//Запрос на получение итнициативы, содержащую описание descrption
     @RequestMapping( path = "/getinitiativebydescriprion/{description}", method = RequestMethod.GET)
     public Initiative getInitiativeByDescription(@PathVariable("description") String description){
     	collect = db.getCollection(DBforInitiatives);
@@ -121,7 +155,7 @@ public class GetDataConroller {
 	 //Запрос на получение списка инициатив
     @RequestMapping(value="/getinitiatives",method={RequestMethod.POST,RequestMethod.GET})
     public List<Initiative> getAllInitives(){
-    	initiatives = new ArrayList<>();
+    	ArrayList<Initiative> initiatives = new ArrayList<>();
     	collect = db.getCollection(DBforInitiatives);
     	System.err.println("Collection size "+collect.count());
     	DBCursor cursor = collect.find();
@@ -132,19 +166,6 @@ public class GetDataConroller {
     	return initiatives;
     }
 
-	 //Запрос на получение списка всех блоков
-    @RequestMapping(value="/getAllBlocks",method={RequestMethod.POST,RequestMethod.GET})
-    public List<Block> getAllBlocks(){
-    	ArrayList<Block> blocks = new ArrayList<>();
-    	collect = db.getCollection(DBforBlocks);
-    	System.err.println("Collection size "+collect.count());
-    	DBCursor cursor = collect.find();
-    	while (cursor.hasNext()){
-    		System.err.println(gson.toJson(cursor.next()));
-    		blocks.add(gson.fromJson(gson.toJson(cursor.next()), Block.class));
-    	}
-    	return blocks;
-    }
 
 	//Запрос на получение списка голосов для генерации блока
     @RequestMapping(value="/getvotes",method={RequestMethod.POST,RequestMethod.GET})
@@ -190,7 +211,6 @@ public class GetDataConroller {
 	//Добавление инициативы, пришедшей от пользователя.
 	@RequestMapping(value="/addinitiative",method=RequestMethod.POST)
     public void addNewInitive(@RequestBody Initiative initiative){
-    	
     	collect = db.getCollection(DBforInitiatives);
     	BasicDBObject object = new BasicDBObject();
     	object.put("description", initiative.description);
@@ -217,7 +237,6 @@ public class GetDataConroller {
 			System.err.println("previous votes count is: "+collect.find(query).count());
 						voteIsFirst = collect.find(query)==null || collect.find(query).count()==0 ; 
 			if (voteIsFirst){
-				
 				String tmpDsaSign=vote.dsaSign;
 				byte[] sign=Base64.getMimeDecoder().decode(vote.dsaSign);
 				byte[] pubKey=Base64.getMimeDecoder().decode(vote.publicKey);
@@ -231,7 +250,6 @@ public class GetDataConroller {
 				System.err.println(valid);
 				if(valid){
 					vote.dsaSign=tmpDsaSign;
-					GetDataConroller.votes.add(vote);
 					BasicDBObject obj = new BasicDBObject();
 					BasicDBObject object = new BasicDBObject();
 			    	object.put("description", vote.initiative.description);
@@ -245,28 +263,5 @@ public class GetDataConroller {
 			}	
 		}
 
-		@RequestMapping(value="/addblock",method=RequestMethod.POST)
-		public void addNewBlock(@RequestBody Block block){
-			collect = db.getCollection(DBforBlocks);
-			DBCursor cursor = collect.find();
-			Block lastBlock = new Block();
-			while(cursor.hasNext()){
-				lastBlock = gson.fromJson(gson.toJson(cursor.next()), Block.class);
-			}
-			if(Block.blockValidity(block, lastBlock, GetDataConroller.goal))
-					GetDataConroller.b = block;
-												
-				BasicDBObject object = new BasicDBObject();
-				object.put("index", b.getIndex());
-				object.put("timestamp",b.getTimestamp());
-				object.put("voteHash",b.getVoteHash());
-				//object.put("votes",gson.toJsonTree(b.votes));
-				object.put("hash",b.getHash());
-				object.put("previousHash",b.getPreviousHash());
-				object.put("previousBlock",gson.toJson(b.getPreviousBlock()));
-				object.put("nonce",b.nonce);
-				collect.insert(object); //падает тут
-				
-		}
 	
 }
