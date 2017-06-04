@@ -135,6 +135,10 @@ public class GetDataConroller {
     		
     		for(int j = 0; j < chain.size(); j++){
     			Block b = chain.get(j);
+    			if (chain.size() == 1){
+    				isTaken = false;
+    				break;
+    			}
     			if(!b.votes.contains(vote)) isTaken = false;
     			
     		}
