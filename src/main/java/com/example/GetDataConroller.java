@@ -51,7 +51,6 @@ public class GetDataConroller {
 	@RequestMapping(value = "/cleanAllBlocks", method={RequestMethod.POST,RequestMethod.GET})
 	public void cleanAllBlocks(){
 		collect = db.getCollection(DBforBlocks);
-		collect = db.getCollection(DBforBlocks);
 		collect.drop(); //Это я зачищал коллекцию
 	}
 	
@@ -132,6 +131,7 @@ public class GetDataConroller {
     	System.err.println("Collection size "+collect.count());
     	DBCursor cursor = collect.find();
     	while (cursor.hasNext()){
+    		System.err.println(gson.toJson(cursor.next()));
     		blocks.add(gson.fromJson(gson.toJson(cursor.next()), Block.class));
     	}
     	return blocks;
