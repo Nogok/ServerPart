@@ -47,9 +47,9 @@ public class BlocksConroller {
 			//Genesis block
 			Initiative i=new Initiative("", new String[]{""});
 			Vote v=new Vote(i,0,"");
-			ArrayList<Vote> vs=new ArrayList<Vote>();
-			vs.add(v);
-			addNewBlock(new Block(vs));
+			ArrayList<Vote> voteList=new ArrayList<Vote>();
+			voteList.add(v);
+			addNewBlock(new Block(voteList));
 		}
 		System.err.println(collect.count());
 		DBCursor cursor = collect.find();

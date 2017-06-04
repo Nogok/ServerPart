@@ -13,8 +13,6 @@ import java.security.spec.X509EncodedKeySpec;
 
 public class DigitalSign {
 
-
-	
 	public static PublicKey convertKey(byte[] data) throws InvalidKeySpecException, NoSuchAlgorithmException{
 		return KeyFactory.getInstance("DSA").generatePublic(new X509EncodedKeySpec(data));
 	}
@@ -26,7 +24,6 @@ public class DigitalSign {
     return (signer.sign());
   }
   
-
   public static boolean verifySig(byte[] data, PublicKey key, byte[] sig) throws Exception {
     Signature signer = Signature.getInstance("SHA1withDSA");
     signer.initVerify(key);

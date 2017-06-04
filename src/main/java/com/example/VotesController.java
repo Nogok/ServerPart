@@ -21,14 +21,12 @@ import com.mongodb.DBObject;
 @RestController
 public class VotesController {
 
-	
 	ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfig.class); //Получение контекста
 	DB db = ctx.getBean(DB.class);//Получение экземпляра Базы Данных
 	DBCollection collect = null; // Создание объекта коллекции (NoSQL)
 	String DBforInitiatives = "INITIATIVES", DBforVotes = "VOTES", DBforBlocks = "BLOCKS"; //Названия коллекций
 	Gson gson = new Gson(); //Json converter для записи в БД
-	
-	
+		
 
 	 //Запрос на получение списка голосов за иниициативу
     @RequestMapping( path = "/getlistofvotes", method={RequestMethod.POST,RequestMethod.GET})

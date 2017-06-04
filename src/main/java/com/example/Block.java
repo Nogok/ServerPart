@@ -3,26 +3,23 @@ package com.example;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 
-import java.util.List;
-
 public class Block  {
 
-    // Variables
 	 private String hash;
-	    private int index = 0; //Index of operation
-	    public long nonce = 0; // добавка для генерации
-	    private Block previousBlock = null; // TODO: investigate it! 
-	    private String previousHash; 
-	    private long timestamp; //Date and time of operation
-	    private String voteHash = ""; // Голоса в блоке
-	    public ArrayList<Vote> votes;
+	 private int index = 0; //Index of operation
+	 public long nonce = 0; // добавка для генерации
+	 private Block previousBlock = null; // TODO: investigate it! 
+	 private String previousHash; 
+	 private long timestamp; //Date and time of operation
+	 private String voteHash = ""; // Голоса в блоке
+	 public ArrayList<Vote> votes;
  
-
+	 
     public Block() {
 		
 	}
     
-    // Constructor for the FIRST Block
+    // Конструктор для первого блока (genesis block)
     public Block(ArrayList<Vote> votes){
         this.votes = votes;
         this.previousHash = "0";
@@ -42,17 +39,15 @@ public class Block  {
         for (int i = 0; i < votes.size(); i++){
             voteHash += votes.get(i).hashcode();
         }
-
     }
 
     // hash function
     public String hashcode(){
-
         MessageDigest md = null;
         try {
             md = MessageDigest.getInstance("SHA-256");
         } catch (Exception e) {
-
+        	e.printStackTrace();
         };
         String futureHash = voteHash+index+timestamp+nonce;
         md.update(futureHash.getBytes());
@@ -61,12 +56,10 @@ public class Block  {
         for (int i = 0; i < byteData.length; i++) {
             sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
         }
-
         return sb.toString();
     }
 
     public static boolean blockValidity(Block a, Block lastBlock, String goal){
-        
         if (a.hash.compareTo(goal) < 0 && a.index == lastBlock.index+1 && a.previousHash.equals(lastBlock.hash)) return true;
         else return false;
     }
@@ -75,9 +68,9 @@ public class Block  {
 		return index;
 	}
 
-	public long getTimestamp() {
-		return timestamp;
-	}
+	public long getTimestamp() {       
+		return timestamp;			
+	}									
 
 	public String getVoteHash() {
 		return voteHash;

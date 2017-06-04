@@ -2,11 +2,12 @@ package com.example;
 
 import java.security.MessageDigest;
 
-public class Vote {
-	public String dsaSign;
-	public Initiative initiative;
-	public String publicKey;
-	public int variant;
+public class Vote { //Класс голоса
+	
+	public String dsaSign; //цифровая подпись пользователя
+	public Initiative initiative; //Голосование, в котором отдан голос
+	public String publicKey; // Публичный ключ пользователя
+	public int variant; // Вариант в голосовании
 	
 	
 	
@@ -18,13 +19,13 @@ public class Vote {
 		this.variant=variant;
 		this.publicKey=publicKey;
 	}
-	  public String hashcode(){
-
+	
+	public String hashcode(){
 	        MessageDigest md = null;
 	        try {
 	            md = MessageDigest.getInstance("SHA-256");
 	        } catch (Exception e) {
-
+	        	e.printStackTrace();
 	        };
 	        String futureHash = dsaSign+initiative.toString()+publicKey+variant;
 	        md.update(futureHash.getBytes());
@@ -33,7 +34,6 @@ public class Vote {
 	        for (int i = 0; i < byteData.length; i++) {
 	            sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
 	        }
-
 	        return sb.toString();
 	    }
 	  

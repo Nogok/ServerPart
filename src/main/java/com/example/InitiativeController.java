@@ -26,6 +26,7 @@ public class InitiativeController {
 	String DBforInitiatives = "INITIATIVES", DBforVotes = "VOTES", DBforBlocks = "BLOCKS"; //Названия коллекций
 	Gson gson = new Gson(); //Json converter для записи в БД
 	
+	
 	//Запрос на получение итнициативы, содержащую описание descrption
     @RequestMapping( path = "/getinitiativebydescriprion/{description}", method = RequestMethod.GET)
     public Initiative getInitiativeByDescription(@PathVariable("description") String description){
@@ -46,7 +47,6 @@ public class InitiativeController {
     	while (cursor.hasNext()){
     		initiatives.add(gson.fromJson(gson.toJson(cursor.next()), Initiative.class));
     	}
-    	
     	return initiatives;
     }
     

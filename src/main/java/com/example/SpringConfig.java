@@ -13,6 +13,7 @@ import com.mongodb.MongoCredential;
 
 @Configuration
 public class SpringConfig {
+	//БД NoSQL
     @Bean
     public DB getDb() throws UnknownHostException {
     	MongoClientURI uri = new MongoClientURI(System.getenv("MONGODB_URI"));
