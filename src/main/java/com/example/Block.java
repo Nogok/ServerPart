@@ -8,13 +8,15 @@ import java.util.List;
 public class Block  {
 
     // Variables
-    private int index = 0; //Index of operation
-    private final Date timestamp; //Date and time of operation
-    private String voteHash;
-    public ArrayList<Vote> votes = new ArrayList<>();
-    private String hash, previousHash;
-    private Block previousBlock = null;
-    public long nonce = 0;
+	 private String hash;
+	    private int index = 0; //Index of operation
+	    public long nonce = 0; // добавка для генерации
+	    private Block previousBlock = null;
+	    private String previousHash;
+	    private final Date timestamp; //Date and time of operation
+	    private String voteHash = ""; // Голоса в блоке
+	    public ArrayList<Vote> votes;
+ 
 
     public Block() {
 		timestamp = new Date();
