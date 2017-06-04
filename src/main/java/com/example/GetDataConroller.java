@@ -52,7 +52,7 @@ public class GetDataConroller {
 	@RequestMapping(value = "/getBlock", method={RequestMethod.POST,RequestMethod.GET})
 	public Block getBlock(){
 		collect = db.getCollection(DBforBlocks);
-		System.err.println(collect.count());
+		if (collect.count() == 0) addNewBlock(b);
 		DBCursor cursor = collect.find();
 		Gson gson = new Gson();
 		while(cursor.hasNext()){
@@ -90,6 +90,7 @@ public class GetDataConroller {
     
     @RequestMapping(value="/getallvotes",method={RequestMethod.POST,RequestMethod.GET})
     public List<Vote> getAllVotesAll(){
+    	ArrayList<Vote> votes = new ArrayList<>();
     	collect = db.getCollection(DBforVotes);
     	System.err.println("All votes count is: "+collect.count());
     	DBCursor cursor = collect.find();
@@ -124,15 +125,14 @@ public class GetDataConroller {
     	collect = db.getCollection(DBforBlocks);
     	cursor = collect.find();
     	List<Block> chain = new ArrayList<>();
-    	
     	while(cursor.hasNext()){
     		chain.add(gson.fromJson(gson.toJson(cursor.next()), Block.class));
     	}
-    	
     	List<Vote> votesNotInBlock = new ArrayList<>();
     	for(int i = 0; i < listOfVotes.size(); i++){
     		boolean isTaken = true;
     		Vote vote = listOfVotes.get(i);
+    		
     		for(int j = 0; j < chain.size(); j++){
     			Block b = chain.get(j);
     			if(!b.votes.contains(vote)) isTaken = false;
