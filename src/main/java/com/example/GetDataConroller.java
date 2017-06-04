@@ -58,7 +58,7 @@ public class GetDataConroller {
 		Gson gson = new Gson();
 		while(cursor.hasNext()){
 			b = gson.fromJson(gson.toJson(cursor.next()), Block.class);
-			System.err.println(b);
+			System.err.println(gson.toJson(b));
 		}
 		return b;
 	}
