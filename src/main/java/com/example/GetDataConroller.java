@@ -54,6 +54,7 @@ public class GetDataConroller {
 		collect = db.getCollection(DBforBlocks);
 		
 		if (collect.count() == 0) addNewBlock(b);
+		System.err.println(collect.count());
 		DBCursor cursor = collect.find();
 		Gson gson = new Gson();
 		while(cursor.hasNext()){
