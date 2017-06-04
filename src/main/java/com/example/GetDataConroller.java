@@ -65,17 +65,20 @@ public class GetDataConroller {
 			addNewBlock(b);
 		}
 		System.err.println(collect.count());
+		collect = db.getCollection(DBforBlocks);
 		DBCursor cursor = collect.find();
 		ArrayList<Block> blocks=new ArrayList<>();
 		while(cursor.hasNext()){
-			Block bb = gson.fromJson(gson.toJson(cursor.next()), Block.class);
+			String str=gson.toJson(cursor.next());
+			System.err.println(str);
+			Block bb = gson.fromJson(str, Block.class);
 			blocks.add(bb);
 			System.err.println(gson.toJson(bb));
 		}
-		return blocks.get(blocks.size()-1); // вот тут сейчас сделаю жуткий костыль ))
+		return blocks.get(blocks.size()-1); // TODO: invistigate it!
 	}
     
-    //Запрос на получение инициативы, содержащую описание descrption
+    //Запрос на получение итнициативы, содержащую описание descrption
     @RequestMapping( path = "/getinitiativebydescriprion/{description}", method = RequestMethod.GET)
     public Initiative getInitiativeByDescription(@PathVariable("description") String description){
     	collect = db.getCollection(DBforInitiatives);
