@@ -13,13 +13,13 @@ public class Block  {
 	    public long nonce = 0; // добавка для генерации
 	    private Block previousBlock = null;
 	    private String previousHash;
-	    private final Date timestamp; //Date and time of operation
+	    private Date timestamp; //Date and time of operation
 	    private String voteHash = ""; // Голоса в блоке
 	    public ArrayList<Vote> votes;
  
 
     public Block() {
-		timestamp = new Date();
+		
 	}
     
     // Constructor for the FIRST Block
