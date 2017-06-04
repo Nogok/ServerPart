@@ -52,7 +52,10 @@ public class GetDataConroller {
 	@RequestMapping(value = "/getBlock", method={RequestMethod.POST,RequestMethod.GET})
 	public Block getBlock(){
 		collect = db.getCollection(DBforBlocks);
-		
+		System.err.println(collect.count());
+		collect.drop();
+		collect = db.getCollection(DBforBlocks);
+		System.err.println(collect.count());
 		if (collect.count() == 0) addNewBlock(b);
 		System.err.println(collect.count());
 		DBCursor cursor = collect.find();
