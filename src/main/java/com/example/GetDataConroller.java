@@ -34,7 +34,7 @@ public class GetDataConroller {
 	public static List<Initiative> initiatives=new ArrayList<>(); //Список инициатив
     public static List<Vote> votes = new ArrayList<>(); //Список нераспределённых в блок голосов
     public static List<Block> chain = new ArrayList<>(); //Цепочка блоков
-    public static String goal = "00000ffaff3939fbca4eb074249dc7d39b1d1ee4fed2da3f87430703cac5d250a"; //Число для условия blockhash < goal
+    public static String goal = "0000fffaff3939fbca4eb074249dc7d39b1d1ee4fed2da3f87430703cac5d250a"; //Число для условия blockhash < goal
 			
     
     /*
