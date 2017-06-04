@@ -11,9 +11,9 @@ public class Block  {
 	 private String hash;
 	    private int index = 0; //Index of operation
 	    public long nonce = 0; // добавка для генерации
-	    private Block previousBlock = null;
-	    private String previousHash;
-	    private Date timestamp; //Date and time of operation
+	    private Block previousBlock = null; // TODO: investigate it! 
+	    private String previousHash; 
+	    private long timestamp; //Date and time of operation
 	    private String voteHash = ""; // Голоса в блоке
 	    public ArrayList<Vote> votes;
  
@@ -28,7 +28,7 @@ public class Block  {
         this.previousHash = "0";
         index = 0;
         this.hash = hashcode();
-        timestamp = new Date();
+        timestamp = System.currentTimeMillis();
     }
 
     // Конструктор для остальных блоков
@@ -37,7 +37,7 @@ public class Block  {
         this.previousHash = previousBlock.hash;
         this.index = previousBlock.index + 1;
         this.hash = hashcode();
-        timestamp = new Date();
+        timestamp = System.currentTimeMillis();
         this.previousBlock = previousBlock;
         for (int i = 0; i < votes.size(); i++){
             voteHash += votes.get(i).hashcode();
@@ -75,7 +75,7 @@ public class Block  {
 		return index;
 	}
 
-	public Date getTimestamp() {
+	public long getTimestamp() {
 		return timestamp;
 	}
 
