@@ -90,5 +90,44 @@ public class VotesController {
     	
     	return votesNotInBlock;
     }
+    
+  //Создание голоса, пришедшего от пользователя. Проверка на достоверность, добавление в список нераспределённых голосов
+  		@RequestMapping( path ="/addvote", method=RequestMethod.POST)
+  		public void voteCreator(@RequestBody Vote vote){
+  			boolean voteIsFirst = true;
+  			collect = db.getCollection(DBforVotes);
+  			BasicDBObject query = new BasicDBObject();
+  			List<BasicDBObject> listForQuery = new ArrayList<>();
+  			listForQuery.add(new BasicDBObject("dsaSign", vote.dsaSign));
+  			listForQuery.add(new BasicDBObject("initiative", gson.toJson(vote.initiative)));
+  			query.put("$and", listForQuery);
+  			System.err.println("previous votes count is: "+collect.find(query).count());
+  						voteIsFirst = collect.find(query)==null || collect.find(query).count()==0 ; 
+  			if (voteIsFirst){
+  				String tmpDsaSign=vote.dsaSign;
+  				byte[] sign=Base64.getMimeDecoder().decode(vote.dsaSign);
+  				byte[] pubKey=Base64.getMimeDecoder().decode(vote.publicKey);
+  				vote.dsaSign=null;
+  				boolean valid = false;
+  				try {
+  					valid = DigitalSign.verifySig(gson.toJson(vote).getBytes(), DigitalSign.convertKey(pubKey) , sign);
+  				} catch (Exception e) {
+  					e.printStackTrace();
+  				}
+  				System.err.println(valid);
+  				if(valid){
+  					vote.dsaSign=tmpDsaSign;
+  					BasicDBObject obj = new BasicDBObject();
+  					BasicDBObject object = new BasicDBObject();
+  			    	object.put("description", vote.initiative.description);
+  			    	object.put("variants", vote.initiative.variants);
+  					obj.put("dsaSign", vote.dsaSign);
+  					obj.put("initiative", object);
+  					obj.put("publicKey",vote.publicKey);
+  					obj.put("variant",vote.variant);
+  					collect.insert(obj);
+  				}  
+  			}	
+  		}
 		
 }
