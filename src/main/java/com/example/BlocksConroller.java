@@ -29,7 +29,7 @@ public class BlocksConroller {
 	DBCollection collect = null; // Создание объекта коллекции (NoSQL)
 	String DBforInitiatives = "INITIATIVES", DBforVotes = "VOTES", DBforBlocks = "BLOCKS"; //Названия коллекций
 	Gson gson = new Gson(); //Json converter для записи в БД
-	public static String goal = "0007fffaff3939fbca4eb074249dc7d39b1d1ee4fed2da3f87430703cac5d250a"; //Число для условия blockhash < goal
+	public static String goal = "0004fffaff3939fbca4eb074249dc7d39b1d1ee4fed2da3f87430703cac5d250a"; //Число для условия blockhash < goal
 			
     
 	//Запрос на получение числа goal
