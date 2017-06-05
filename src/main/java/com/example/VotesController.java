@@ -28,6 +28,11 @@ public class VotesController {
 	Gson gson = new Gson(); //Json converter для записи в БД
 		
 
+	@RequestMapping(value = "/cleanVotesDB", method={RequestMethod.POST,RequestMethod.GET})
+	public void cleanDBInit(){
+		collect = db.getCollection(DBforVotes);
+		collect.drop();
+	}
 	 //Запрос на получение списка голосов за иниициативу
     @RequestMapping( path = "/getlistofvotes", method={RequestMethod.POST,RequestMethod.GET})
     public List<Vote> getVotesForInitiative(@RequestBody Initiative initiative){
