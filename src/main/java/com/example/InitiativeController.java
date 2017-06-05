@@ -65,4 +65,10 @@ public class InitiativeController {
       	}
       	   	
       }
+  	
+  	@RequestMapping(value = "/cleanInitiativeDB", method={RequestMethod.POST,RequestMethod.GET})
+	public void cleanDBInit(){
+		collect = db.getCollection(DBforInitiatives);
+		collect.drop();
+	}
 }
