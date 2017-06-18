@@ -8,34 +8,34 @@ public class Block  {
 	 private String hash;
 	 private int index = 0; //Index of operation
 	 public long nonce = 0; // добавка для генерации
-	 private Block previousBlock = null; // TODO: investigate it! 
 	 private String previousHash; 
 	 private long timestamp; //Date and time of operation
 	 private String voteHash = ""; // Голоса в блоке
 	 public ArrayList<Vote> votes;
- 
+	 public String goal;
 	 
     public Block() {
 		
 	}
     
     // Конструктор для первого блока (genesis block)
-    public Block(ArrayList<Vote> votes){
+    public Block(ArrayList<Vote> votes,String goal){
         this.votes = votes;
         this.previousHash = "0";
         index = 0;
         this.hash = hashcode();
+        this.goal = goal;
         timestamp = System.currentTimeMillis();
     }
 
     // Конструктор для остальных блоков
-    public Block(ArrayList<Vote> votes, Block previousBlock){
+    public Block(ArrayList<Vote> votes, Block previousBlock, String goal){
         this.votes = votes;
         this.previousHash = previousBlock.hash;
         this.index = previousBlock.index + 1;
         this.hash = hashcode();
+        this.goal = goal;
         timestamp = System.currentTimeMillis();
-        this.previousBlock = previousBlock;
         for (int i = 0; i < votes.size(); i++){
             voteHash += votes.get(i).hashcode();
         }
@@ -49,7 +49,7 @@ public class Block  {
         } catch (Exception e) {
         	e.printStackTrace();
         };
-        String futureHash = voteHash+index+timestamp+nonce;
+        String futureHash = voteHash+index+timestamp+nonce+previousHash+goal;
         md.update(futureHash.getBytes());
         byte byteData[] = md.digest();
         StringBuffer sb = new StringBuffer();
@@ -60,7 +60,7 @@ public class Block  {
     }
 
     public static boolean blockValidity(Block a, Block lastBlock, String goal){
-        if (a.hash.compareTo(goal) < 0 && a.index == lastBlock.index+1 && a.previousHash.equals(lastBlock.hash)) return true;
+        if (a.hash.compareTo(goal) < 0 && a.index == lastBlock.index + 1 && a.previousHash.equals(lastBlock.hash)) return true;
         else return false;
     }
 
@@ -82,10 +82,6 @@ public class Block  {
 
 	public String getPreviousHash() {
 		return previousHash;
-	}
-
-	public Block getPreviousBlock() {
-		return previousBlock;
 	}
 
 }

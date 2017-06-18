@@ -49,7 +49,7 @@ public class BlocksConroller {
 			Vote v=new Vote(i,0,"");
 			ArrayList<Vote> voteList=new ArrayList<Vote>();
 			voteList.add(v);
-			addNewBlock(new Block(voteList));
+			addNewBlock(new Block(voteList,goal));
 		}
 		System.err.println(collect.count());
 		DBCursor cursor = collect.find();
@@ -59,7 +59,7 @@ public class BlocksConroller {
 			blocks.add(bb);
 		}
 		if(blocks.size()>0)
-		return blocks.get(blocks.size()-1); // TODO: invistigate it!
+		return blocks.get(blocks.size()-1); // TODO: investigate it!
 		else return null;
 	}
 	//Очистка базы данных с блоками TODO Убрать!
@@ -92,7 +92,7 @@ public class BlocksConroller {
 		while(cursor.hasNext()){
 			lastBlock = gson.fromJson(gson.toJson(cursor.next()), Block.class);
 		}
-		if(collect.count()==0 || Block.blockValidity(block, lastBlock, BlocksConroller.goal)){
+		if(collect.count() == 0 || Block.blockValidity(block, lastBlock, block.goal)){
 			collect.insert((DBObject)JSON.parse(gson.toJson(block))); 				
 		}
 	}
