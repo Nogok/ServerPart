@@ -16,6 +16,8 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.util.JSON;
 
 @RestController
 public class InitiativeController {
@@ -54,14 +56,14 @@ public class InitiativeController {
   	@RequestMapping(value="/addinitiative",method=RequestMethod.POST)
       public void addNewInitive(@RequestBody Initiative initiative){
       	collect = db.getCollection(DBforInitiatives);
-      	BasicDBObject object = new BasicDBObject();
-      	object.put("description", initiative.description);
-      	object.put("variants", initiative.variants);
+//      	BasicDBObject object = new BasicDBObject();
+//      	object.put("description", initiative.description);
+//      	object.put("variants", initiative.variants);
       	BasicDBObject whereQuery = new BasicDBObject();
       	whereQuery.put("description", initiative.description);
       	DBCursor cursor = collect.find(whereQuery);
       	if (!cursor.hasNext()){
-      		collect.insert(object);
+      		collect.insert((DBObject)JSON.parse(gson.toJson(initiative)));
       	}
       	   	
       }
