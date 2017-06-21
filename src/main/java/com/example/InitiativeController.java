@@ -56,9 +56,6 @@ public class InitiativeController {
   	@RequestMapping(value="/addinitiative",method=RequestMethod.POST)
       public void addNewInitive(@RequestBody Initiative initiative){
       	collect = db.getCollection(DBforInitiatives);
-//      	BasicDBObject object = new BasicDBObject();
-//      	object.put("description", initiative.description);
-//      	object.put("variants", initiative.variants);
       	BasicDBObject whereQuery = new BasicDBObject();
       	whereQuery.put("description", initiative.description);
       	DBCursor cursor = collect.find(whereQuery);
