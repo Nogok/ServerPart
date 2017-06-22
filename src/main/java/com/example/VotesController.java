@@ -105,10 +105,10 @@ public class VotesController {
   			BasicDBObject query = new BasicDBObject();
   			List<BasicDBObject> listForQuery = new ArrayList<>();
   			listForQuery.add(new BasicDBObject("publicKey", vote.publicKey));
-  			listForQuery.add(new BasicDBObject("initiative", gson.toJson(vote.initiative)));
+  			listForQuery.add(new BasicDBObject("description", vote.initiative.description));
   			query.put("$and", listForQuery);
   			System.err.println("previous votes count is: "+collect.find(query).count());
-  			voteIsFirst = collect.find(query)==null || collect.find(query).count()==0 ; 
+  			voteIsFirst = !collect.find(query).hasNext() || collect.find(query).count()==0 ; 
   			if (voteIsFirst){
   				String tmpDsaSign=vote.dsaSign;
   				byte[] sign=Base64.getMimeDecoder().decode(vote.dsaSign);
