@@ -93,7 +93,7 @@ public class BlocksConroller {
     	for(int i = 0; i < collect.count(); i++){
     		basicDBObject = new BasicDBObject("previousHash",previousHash);
     		cursor = collect.find(basicDBObject);
-    		b = (Block)JSON.parse(gson.toJson(cursor.next()));
+    		b = gson.fromJson((gson.toJson(cursor.next())),Block.class);
     		blocks.add(b);
     		previousHash = b.getHash();
     	}
