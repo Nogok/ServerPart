@@ -22,12 +22,12 @@ import com.mongodb.util.JSON;
 @RestController
 public class VotesController {
 
+	
 	ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfig.class); //Получение контекста
 	DB db = ctx.getBean(DB.class);//Получение экземпляра Базы Данных
 	DBCollection collect = null; // Создание объекта коллекции (NoSQL)
 	String DBforInitiatives = "INITIATIVES", DBforVotes = "VOTES", DBforBlocks = "BLOCKS"; //Названия коллекций
-	Gson gson = new Gson(); //Json converter для записи в БД
-		
+	Gson gson = new Gson(); //Json converter для записи в БД	
 
 	@RequestMapping(value = "/cleanVotesDB", method={RequestMethod.POST,RequestMethod.GET})
 	public void cleanDBInit(){

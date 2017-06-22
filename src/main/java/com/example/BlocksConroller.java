@@ -29,7 +29,7 @@ public class BlocksConroller {
 	DBCollection collect = null; // Создание объекта коллекции (NoSQL)
 	String DBforInitiatives = "INITIATIVES", DBforVotes = "VOTES", DBforBlocks = "BLOCKS"; //Названия коллекций
 	Gson gson = new Gson(); //Json converter для записи в БД
-	public static String goal = "0004fffaff3939fbca4eb074249dc7d39b1d1ee4fed2da3f87430703cac5d250a"; //Число для условия blockhash < goal
+	public static String goal = "0ff4fffaff3939fbca4eb074249dc7d39b1d1ee4fed2da3f87430703cac5d250a"; //Число для условия blockhash < goal
 			
     
 	//Запрос на получение числа goal
@@ -82,6 +82,25 @@ public class BlocksConroller {
     	}
     	return blocks;
     }
+    @RequestMapping(value="/getChain",method={RequestMethod.POST,RequestMethod.GET})
+    public ArrayList<Block> getChain(){
+    	ArrayList<Block> blocks = new ArrayList<>();
+    	collect = db.getCollection(DBforBlocks);
+    	String previousHash = "0";
+    	BasicDBObject basicDBObject;
+    	DBCursor cursor;
+    	Block b;
+    	for(int i = 0; i < collect.count(); i++){
+    		basicDBObject = new BasicDBObject("previousHash",previousHash);
+    		cursor = collect.find(basicDBObject);
+    		b = (Block)JSON.parse(gson.toJson(cursor.next()));
+    		blocks.add(b);
+    		previousHash = b.getHash();
+    	}
+    	return blocks;
+    	
+    }
+    
 
 	//Добавление блока в БД
 	@RequestMapping(value="/addblock",method=RequestMethod.POST)
