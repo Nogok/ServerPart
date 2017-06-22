@@ -105,7 +105,7 @@ public class VotesController {
   			BasicDBObject query = new BasicDBObject();
   			List<BasicDBObject> listForQuery = new ArrayList<>();
   			listForQuery.add(new BasicDBObject("publicKey", vote.publicKey));
-  			listForQuery.add(new BasicDBObject("initiative", gson.toJson(vote.initiative)));
+  			listForQuery.add(new BasicDBObject("initiative", JSON.parse(gson.toJson(vote.initiative))));
   			query.put("$and", listForQuery);
   			System.err.println(query.toString());
   			System.err.println("previous votes count is: "+collect.find(query).count());
