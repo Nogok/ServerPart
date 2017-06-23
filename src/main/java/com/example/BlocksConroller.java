@@ -45,7 +45,7 @@ public class BlocksConroller {
 		System.err.println(collect.count());
 		if (collect.count() == 0) {
 			//Genesis block
-			Initiative i=new Initiative("", new String[]{""});
+			Initiative i=new Initiative("","", new String[]{""});
 			Vote v=new Vote(i,0,"");
 			ArrayList<Vote> voteList=new ArrayList<Vote>();
 			voteList.add(v);
