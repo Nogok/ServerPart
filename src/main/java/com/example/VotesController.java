@@ -29,6 +29,7 @@ public class VotesController {
 	String DBforInitiatives = "INITIATIVES", DBforVotes = "VOTES", DBforBlocks = "BLOCKS"; //Названия коллекций
 	Gson gson = new Gson(); //Json converter для записи в БД	
 
+	// Запрос на удаление коллекции голосов. TODO убрать!
 	@RequestMapping(value = "/cleanVotesDB", method={RequestMethod.POST,RequestMethod.GET})
 	public void cleanDBInit(){
 		collect = db.getCollection(DBforVotes);
@@ -50,7 +51,7 @@ public class VotesController {
     	
     	return votesForInitiative;
     }
-    
+    // Запрос на получение всех голосов
     @RequestMapping(value="/getallvotes",method={RequestMethod.POST,RequestMethod.GET})
     public List<Vote> getAllVotesAll(){
     	ArrayList<Vote> votes = new ArrayList<>();

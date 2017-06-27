@@ -64,7 +64,7 @@ public class InitiativeController {
       	}
       	   	
       }
-  	
+  	// Очистка коллекции Инициатив TODO убрать!
   	@RequestMapping(value = "/cleanInitiativeDB", method={RequestMethod.POST,RequestMethod.GET})
 	public void cleanDBInit(){
 		collect = db.getCollection(DBforInitiatives);

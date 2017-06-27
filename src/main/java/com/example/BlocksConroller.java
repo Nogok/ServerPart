@@ -82,6 +82,7 @@ public class BlocksConroller {
     	}
     	return blocks;
     }
+    // Запрос на получение цепочки блоков (чётко соблюдён порядок добавления)
     @RequestMapping(value="/getChain",method={RequestMethod.POST,RequestMethod.GET})
     public ArrayList<Block> getChain(){
     	ArrayList<Block> blocks = new ArrayList<>();
